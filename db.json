@@ -1,11 +1,11 @@
 {
   "projects": [
     {
-      "name": "Kanban",
+      "name": "Kanban 2.0",
       "budget": "1000",
       "category": {
-        "id": "5",
-        "name": "Análises de Dados"
+        "id": "2",
+        "name": "Desenvolvimento"
       },
       "cost": 0,
       "services": [],
