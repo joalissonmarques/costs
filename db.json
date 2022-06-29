@@ -29,8 +29,15 @@
         "id": "5",
         "name": "Análises de Dados"
       },
-      "cost": 0,
-      "services": [],
+      "cost": 200,
+      "services": [
+        {
+          "name": "Novo serviço para teste",
+          "cost": "200",
+          "description": "Novo serviço",
+          "id": "785e754e-88c2-4a46-8181-a11690866057"
+        }
+      ],
       "id": 3
     }
   ],
