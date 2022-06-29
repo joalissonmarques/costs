@@ -1,3 +1,4 @@
+import {parse,  v4 as uuidv4} from 'uuid'
 import styles from './Project.module.css'
 import Loading from '../layout/Loading'
 import Container from '../layout/Container'
@@ -35,12 +36,10 @@ function Project() {
   }, [id])
 
   function editPost(project) {
-
-   setMessage('')
-    //budget validaation
+    setMessage('')
+    // budget validation
     if (project.budget < project.cost) {
-      //mensagem
-      setMessage('O orçamento não pode ser menor que o custo do Projeto!')
+      setMessage('O Orçamento não pode ser menor que o custo do projeto!')
       setType('error')
       return false
     }
@@ -48,23 +47,54 @@ function Project() {
     fetch(`http://localhost:5000/projects/${project.id}`, {
       method: 'PATCH',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(project)
+      body: JSON.stringify(project),
     })
-      .then(resp => resp.json())
-      .then(data => {
+      .then((resp) => resp.json())
+      .then((data) => {
         setProject(data)
-        setShowProjectForm(false)
-        //mensagem
+        setShowProjectForm(!showProjectForm)
         setMessage('Projeto atualizado!')
-        setType('sucess')
+        setType('success')
       })
-      .catch(err => console.log(err))
   }
 
-  function createService(){
-    
+  function createService(project){
+    setMessage('')
+    //last service
+    const lastService = project.services[project.services.length - 1]
+
+    lastService.id = uuidv4()
+
+    const lastServiceCost = lastService.cost
+
+    const newCost = parseFloat(project.cost) + parseFloat(lastServiceCost)
+
+    //maximum value validation
+    if(newCost > parseFloat(project.budget)){
+      setMessage('Orçamento ultrapssado, verifique o valor do serviço')
+      setType('error')
+      project.services.pop()
+      return false
+    }
+
+    //add service cost to project total cost
+    project.cost = newCost
+
+    //update project
+    fetch(`http://localhost:5000/projects/${project.id}`,{
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(project),
+    }).then((resp) => resp.json())
+    .then((data) =>{
+      //exibirServiços
+      console.log(data)
+    })
+    .catch(err => console.log(err))
   }
 
   function toggleProjectForm() {
